@@ -12,6 +12,18 @@ namespace upc {
 
     for (unsigned int l = 0; l < r.size(); ++l) {
   		/// \TODO Compute the autocorrelation r[l]
+      /** \FET Calculem autocorrelació
+       * #Titulo grande
+       * ##Subtitulo1
+       * 
+       */
+      r[l] = 0.0f;
+
+      for(unsigned int n=l;n<x.size();n++){
+        r[l] += x[n]*x[n-l];
+      }
+
+      r[l] = r[l]/x.size();
     }
 
     if (r[0] == 0.0F) //to avoid log() and divide zero 
@@ -50,7 +62,11 @@ namespace upc {
     /// \TODO Implement a rule to decide whether the sound is voiced or not.
     /// * You can use the standard features (pot, r1norm, rmaxnorm),
     ///   or compute and use other ones.
-    return true;
+    float alpha1 = 0.5;
+    bool unvoiced = true;
+    if (rmaxnorm>alpha1)
+      unvoiced = false;
+    return unvoiced;
   }
 
   float PitchAnalyzer::compute_pitch(vector<float> & x) const {
@@ -76,9 +92,19 @@ namespace upc {
     ///	   .
 	/// In either case, the lag should not exceed that of the minimum value of the pitch.
 
-    unsigned int lag = iRMax - r.begin();
+  /// \FET pitch loaclitzat
 
-    float pot = 10 * log10(r[0]);
+  for (iR = iRMax =r.begin() + npitch_min; iR < r.begin() + npitch_max; iR++)
+    {
+      if(*iR > * iRMax){iRMax=iR;}
+    }
+
+  unsigned int lag = iRMax - r.begin();
+
+  float pot = 10 * log10(r[0]);
+
+  
+    
 
     //You can print these (and other) features, look at them using wavesurfer
     //Based on that, implement a rule for unvoiced
