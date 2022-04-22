@@ -13,10 +13,11 @@ namespace upc {
     for (unsigned int l = 0; l < r.size(); ++l) {
   		/// \TODO Compute the autocorrelation r[l]
       /** \FET Calculem autocorrelació
-       * #Titulo grande
-       * ##Subtitulo1
-       * 
+       * -Autocorrelacio posada a 0
+       * -Autocorrelacio acumulada per tot el senyal
+       * -Autocorrelacio/length
        */
+
       r[l] = 0.0f;
 
       for(unsigned int n=l;n<x.size();n++){
@@ -39,39 +40,68 @@ namespace upc {
     switch (win_type) {
     case HAMMING:
       /// \TODO Implement the Hamming window
+      /** \FET Implementem Hamming
+       */
+      window.assign(frameLen, 1);
+      for (unsigned int i = 0; i < frameLen; i++)
+      {
+        // window[i] = 0.54 + 0.46 * cos(2 * 3.1416 * i);
+        window[i] = 0.54 - 0.46 * cos(2 * 3.1416 * (i / frameLen));
+      }
       break;
     case RECT:
     default:
       window.assign(frameLen, 1);
-    }
+      break;
+  }
   }
 
-  void PitchAnalyzer::set_f0_range(float min_F0, float max_F0) {
-    npitch_min = (unsigned int) samplingFreq/max_F0;
+
+  void PitchAnalyzer::set_f0_range(float min_F0, float max_F0)
+  {
+    npitch_min = (unsigned int)samplingFreq / max_F0;
     if (npitch_min < 2)
-      npitch_min = 2;  // samplingFreq/2
+      npitch_min = 2; // samplingFreq/2
 
-    npitch_max = 1 + (unsigned int) samplingFreq/min_F0;
+    npitch_max = 1 + (unsigned int)samplingFreq / min_F0;
 
-    //frameLen should include at least 2*T0
-    if (npitch_max > frameLen/2)
-      npitch_max = frameLen/2;
+    // frameLen should include at least 2*T0
+    if (npitch_max > frameLen / 2)
+      npitch_max = frameLen / 2;
   }
 
-  bool PitchAnalyzer::unvoiced(float pot, float r1norm, float rmaxnorm) const {
+  bool PitchAnalyzer::unvoiced(float pot, float r1norm, float rmaxnorm) const
+  {
     /// \TODO Implement a rule to decide whether the sound is voiced or not.
     /// * You can use the standard features (pot, r1norm, rmaxnorm),
     ///   or compute and use other ones.
-    float alpha1 = 0.5;
+    /** \FET s'ha decidit el criteri de sonoritat
+     */
     bool unvoiced = true;
-    if (rmaxnorm>alpha1)
+    if ((rmaxnorm > umaxnorm || r1norm > 0.95))
       unvoiced = false;
+    if (pot < -15)
+      unvoiced = true;
     return unvoiced;
   }
 
   float PitchAnalyzer::compute_pitch(vector<float> & x) const {
+    //Compute pitch calcula la autocorrelación
     if (x.size() != frameLen)
       return -1.0F;
+
+    //Frame center-clipping
+    float max = *std::max_element(x.begin(), x.end());
+    for(int i = 0; i < (int)x.size(); i++) {
+      if(abs(x[i]) < 0.01) {
+        x[i] = 0.0F;
+      }
+    }
+
+    //Frame normalization
+    max = *std::max_element(x.begin(), x.end());
+    for (int i = 0; i < (int)x.size(); i++)
+      x[i] /= max;
 
     //Window input frame
     for (unsigned int i=0; i<x.size(); ++i)
@@ -92,31 +122,32 @@ namespace upc {
     ///	   .
 	/// In either case, the lag should not exceed that of the minimum value of the pitch.
 
-  /// \FET pitch loaclitzat
-
-  for (iR = iRMax =r.begin() + npitch_min; iR < r.begin() + npitch_max; iR++)
-    {
-      if(*iR > * iRMax){iRMax=iR;}
+    for(iR = iRMax =  r.begin() + npitch_min; iR < r.begin() + npitch_max; iR++){ // The maximum has to be located between the minimum and maximum pitch, so it is a reasonable value.
+      // begin() is used to return an iterator pointing to the first element of the vector container
+      if(*iR > * iRMax) iRMax = iR; //Localizamos el máximo --> Se actualiza iRMax si el valor concreto que se está estudiando en ese momento es mayor.
     }
+    unsigned int lag = iRMax - r.begin(); // Cálculo del desplazamiento del pico
 
-  unsigned int lag = iRMax - r.begin();
+    /** 
+      * \FET S'ha calculat el lag del valor maxim
+      * - s'ha iterat el vector de l'autocorrelacio
+      * - Selecció del valor més alt durant la iteració.
+      * - Diferència entre la posició del valor més alt i la posició inicial.
+    */
 
-  float pot = 10 * log10(r[0]);
-
-  
-    
+    float pot = 10 * log10(r[0]); 
 
     //You can print these (and other) features, look at them using wavesurfer
     //Based on that, implement a rule for unvoiced
     //change to #if 1 and compile
-#if 0
+#if 0 //Este if 0 sirve para ver la forma de la autocorrelación. Si ponemos if 1 veremos los valores en pantalla
     if (r[0] > 0.0F)
       cout << pot << '\t' << r[1]/r[0] << '\t' << r[lag]/r[0] << endl;
 #endif
     
     if (unvoiced(pot, r[1]/r[0], r[lag]/r[0]))
-      return 0;
+      return 0; // 0 indica trama sorda
     else
-      return (float) samplingFreq/(float) lag;
+      return (float) samplingFreq/(float) lag; // Si es sonora, se devuelve la frecuencia de pitch del máximo de la autocorrelaación en Hz
   }
 }
