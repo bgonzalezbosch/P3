@@ -27,7 +27,11 @@ Ejercicios básicos
    * Determine el mejor candidato para el periodo de pitch localizando el primer máximo secundario de la
      autocorrelación. Inserte a continuación el código correspondiente.
 
+   <img width="885" alt="Mejor Candidato" src="https://github.com/bgonzalezbosch/P3/blob/Bernat-Roger/mejor_candidato.png">
+
    * Implemente la regla de decisión sonoro o sordo e inserte el código correspondiente.
+
+   <img width="575" alt="Decisión sonoro o sordo" src="https://github.com/bgonzalezbosch/P3/blob/Bernat-Roger/unvoiced.png">
 
 - Una vez completados los puntos anteriores, dispondrá de una primera versión del estimador de pitch. El 
   resto del trabajo consiste, básicamente, en obtener las mejores prestaciones posibles con él.
