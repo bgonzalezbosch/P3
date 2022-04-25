@@ -26,7 +26,8 @@ Ejercicios básicos
 	
    <img width="1234" alt="pitch" src="https://github.com/bgonzalezbosch/P3/blob/Bernat-Roger/pitch.png"> 
    
-   pitch a partir de segmento sonoro de la vocal "a" del fichero rl002.wav
+   Pitch a partir de segmento sonoro de la vocal "a" del fichero rl002.wav
+   Gráfica generada a partir del fichero grafico_pitch.py
    
    * Determine el mejor candidato para el periodo de pitch localizando el primer máximo secundario de la
      autocorrelación. Inserte a continuación el código correspondiente.
@@ -108,9 +109,10 @@ Ejercicios de ampliación
   
   Una vez ejecutado, podemos observar los resultados obtenidos respecto a l'original en la siguiente grafica generada con python.
   
-  <img width="393" alt="Comparativa" src="https://github.com/bgonzalezbosch/P3/blob/Bernat-Roger/senyals.png">
+  <img width="1201" alt="Comparativa" src="https://github.com/bgonzalezbosch/P3/blob/Bernat-Roger/senyals.png">
   
   Finalmente, obtenemos un TOTAL de 91.1% 
+  Gráfica generada a partir del fichero grafico_comparativa.py
 
   Encontrará más información acerca de estas técnicas en las [Transparencias del Curso](https://atenea.upc.edu/pluginfile.php/2908770/mod_resource/content/3/2b_PS%20Techniques.pdf)
   y en [Spoken Language Processing](https://discovery.upc.edu/iii/encore/record/C__Rb1233593?lang=cat).
