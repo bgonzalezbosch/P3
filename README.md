@@ -23,7 +23,11 @@ Ejercicios básicos
 
 	 NOTA: es más que probable que tenga que usar Python, Octave/MATLAB u otro programa semejante para
 	 hacerlo. Se valorará la utilización de la biblioteca matplotlib de Python.
-
+	
+   <img width="1234" alt="pitch" src="https://github.com/bgonzalezbosch/P3/blob/Bernat-Roger/pitch.png"> 
+   
+   pitch a partir de segmento sonoro de la vocal "a" del fichero rl002.wav
+   
    * Determine el mejor candidato para el periodo de pitch localizando el primer máximo secundario de la
      autocorrelación. Inserte a continuación el código correspondiente.
 
@@ -49,12 +53,17 @@ Ejercicios básicos
 	    Recuerde configurar los paneles de datos para que el desplazamiento de ventana sea el adecuado, que
 		en esta práctica es de 15 ms.
 
+
       - Use el estimador de pitch implementado en el programa `wavesurfer` en una señal de prueba y compare
 	    su resultado con el obtenido por la mejor versión de su propio sistema.  Inserte una gráfica
 		ilustrativa del resultado de ambos estimadores.
      
 		Aunque puede usar el propio Wavesurfer para obtener la representación, se valorará
 	 	el uso de alternativas de mayor calidad (particularmente Python).
+	
+   <img width="1201" alt="Comparativa" src="https://github.com/bgonzalezbosch/P3/blob/Bernat-Roger/wavesurfer.png">
+   
+   En la captura obtenemos la información del audio rl002.wav con su potencia, amplitud de onda y su detección de pitch 
   
   * Optimice los parámetros de su sistema de estimación de pitch e inserte una tabla con las tasas de error
     y el *score* TOTAL proporcionados por `pitch_evaluate` en la evaluación de la base de datos 
@@ -79,12 +88,29 @@ Ejercicios de ampliación
   Entre las posibles mejoras, puede escoger una o más de las siguientes:
 
   * Técnicas de preprocesado: filtrado paso bajo, diezmado, *center clipping*, etc.
+  
+  En la siguiente imagen se muestra el código de preprocesado que henos utilizado.
+  
+  <img width="601" alt="Preprocesado" src="https://github.com/bgonzalezbosch/P3/blob/Bernat-Roger/preporcess.png">
+  
+  
   * Técnicas de postprocesado: filtro de mediana, *dynamic time warping*, etc.
+  
+  En el postprocesado hemos optado por un filtro de mediana: 
+  
+  <img width="393" alt="Postprocesado" src="https://github.com/bgonzalezbosch/P3/blob/Bernat-Roger/postporcess.png">
+  
   * Métodos alternativos a la autocorrelación: procesado cepstral, *average magnitude difference function*
     (AMDF), etc.
   * Optimización **demostrable** de los parámetros que gobiernan el estimador, en concreto, de los que
     gobiernan la decisión sonoro/sordo.
   * Cualquier otra técnica que se le pueda ocurrir o encuentre en la literatura.
+  
+  Una vez ejecutado, podemos observar los resultados obtenidos respecto a l'original en la siguiente grafica generada con python.
+  
+  <img width="393" alt="Comparativa" src="https://github.com/bgonzalezbosch/P3/blob/Bernat-Roger/senyals.png">
+  
+  Finalmente, obtenemos un TOTAL de 91.1% 
 
   Encontrará más información acerca de estas técnicas en las [Transparencias del Curso](https://atenea.upc.edu/pluginfile.php/2908770/mod_resource/content/3/2b_PS%20Techniques.pdf)
   y en [Spoken Language Processing](https://discovery.upc.edu/iii/encore/record/C__Rb1233593?lang=cat).
